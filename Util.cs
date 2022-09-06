@@ -53,7 +53,12 @@ public static class Util
             {
                 sb.Append(proc.StandardOutput.ReadLine());
             }
-            Console.WriteLine(sb.ToString());
+            var line = sb.ToString();
+            line = line.Substring(line.IndexOf(':') + 2);
+            var userStr = line.Substring(0, line.IndexOf('u')).Trim();
+            line = line.Substring(line.IndexOf(',') + 2);
+            var sysStr = line.Substring(0, line.IndexOf('s')).Trim();
+            return Convert.ToDouble(userStr) + Convert.ToDouble(sysStr);
         }
         catch { }
 
