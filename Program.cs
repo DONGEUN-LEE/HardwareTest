@@ -4,11 +4,11 @@
 // {
 //     IsCpuEnabled = true,
 //     IsGpuEnabled = true,
-//     IsMemoryEnabled = true,
+//     IsMemoryEnabled = false,
 //     IsMotherboardEnabled = false,
-//     IsControllerEnabled = true,
-//     IsNetworkEnabled = true,
-//     IsStorageEnabled = true
+//     IsControllerEnabled = false,
+//     IsNetworkEnabled = false,
+//     IsStorageEnabled = false
 // };
 
 // var collector = new SensorCollector(computer);
@@ -21,9 +21,12 @@
 
 // collector.Dispose();
 
-// var onStart = 
-// Thread.Sleep(500);
-// var onEnd = CpuUsage.GetByProcess();
-// Console.WriteLine("CPU Usage: " + (onEnd - onStart));
+var onStart = CpuUsage.GetBySystem();
+Thread.Sleep(500);
+var onEnd = CpuUsage.GetBySystem();
+Console.WriteLine("CPU Usage System: " + (onEnd - onStart));
 
-Console.WriteLine(CpuUsage.GetByProcess().ToString());
+var onStartP = CpuUsage.GetByProcess();
+Thread.Sleep(500);
+var onEndP = CpuUsage.GetByProcess();
+Console.WriteLine("CPU Usage Process: " + (onEndP - onStartP));

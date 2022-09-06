@@ -13,6 +13,11 @@ public struct CpuUsage
         return Get(CpuUsageScope.Process);
     }
 
+    public static CpuUsage? GetBySystem()
+    {
+        return Get(CpuUsageScope.System);
+    }
+
     public static bool IsSupported => CpuUsageReader.IsSupported;
 
     // for intellisense
@@ -150,4 +155,5 @@ public enum CpuUsageScope
 {
     Thread,
     Process,
+    System,
 }

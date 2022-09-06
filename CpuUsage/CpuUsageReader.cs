@@ -34,16 +34,25 @@ internal class CpuUsageReader
             else
                 return WindowsCpuUsage.Get(CpuUsageScope.Process);
         }
+        else if (scope == CpuUsageScope.Thread)
+        {
+            if (platform == CrossInfo.Platform.Linux)
+                return LinuxResourceUsageReader.GetByThread();
 
-        if (platform == CrossInfo.Platform.Linux)
-            return LinuxResourceUsageReader.GetByThread();
+            else if (platform == CrossInfo.Platform.MacOSX)
+                return MacOsThreadInfo.GetByThread();
 
-        else if (platform == CrossInfo.Platform.MacOSX)
-            return MacOsThreadInfo.GetByThread();
-
-        else if (platform == CrossInfo.Platform.Windows)
-            // throw new NotImplementedException("CPU Usage in the scope of the thread is not yet implemented for Windows");
-            return WindowsCpuUsage.Get(CpuUsageScope.Thread);
+            else if (platform == CrossInfo.Platform.Windows)
+                // throw new NotImplementedException("CPU Usage in the scope of the thread is not yet implemented for Windows");
+                return WindowsCpuUsage.Get(CpuUsageScope.Thread);
+        }
+        else
+        {
+            if (platform == CrossInfo.Platform.Linux || platform == CrossInfo.Platform.MacOSX)
+                return LinuxResourceUsageReader.GetByProcess();
+            else
+                return WindowsCpuUsage.Get(CpuUsageScope.System);
+        }
 
         throw new InvalidOperationException($"CPU usage in the scope of {scope} is a kind of an unknown on the {platform}");
     }

@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 public static class WindowsCpuUsage
 {
     public static bool IsSupported => _IsSupported.Value;
@@ -12,8 +10,10 @@ public static class WindowsCpuUsage
         bool isOk;
         if (scope == CpuUsageScope.Thread)
             isOk = WindowsCpuUsageInterop.GetThreadTimes(out kernelMicroseconds, out userMicroseconds);
-        else
+        else if (scope == CpuUsageScope.Process)
             isOk = WindowsCpuUsageInterop.GetProcessTimes(out kernelMicroseconds, out userMicroseconds);
+        else
+            isOk = WindowsCpuUsageInterop.GetSystemTimes(out kernelMicroseconds, out userMicroseconds);
 
         if (!isOk)
             return null;
