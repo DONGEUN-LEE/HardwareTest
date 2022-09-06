@@ -21,12 +21,25 @@
 
 // collector.Dispose();
 
-var onStart = CpuUsage.GetBySystem();
-Thread.Sleep(500);
-var onEnd = CpuUsage.GetBySystem();
-Console.WriteLine("CPU Usage System: " + (onEnd - onStart));
+// var onStart = CpuUsage.GetBySystem();
+// Thread.Sleep(500);
+// var onEnd = CpuUsage.GetBySystem();
+// Console.WriteLine("CPU Usage System: " + (onEnd - onStart));
 
-var onStartP = CpuUsage.GetByProcess();
-Thread.Sleep(500);
-var onEndP = CpuUsage.GetByProcess();
-Console.WriteLine("CPU Usage Process: " + (onEndP - onStartP));
+// var onStartP = CpuUsage.GetByProcess();
+// Thread.Sleep(500);
+// var onEndP = CpuUsage.GetByProcess();
+// Console.WriteLine("CPU Usage Process: " + (onEndP - onStartP));
+
+if (OperatingSystem.IsWindows()) 
+{
+    Console.WriteLine($"{Math.Round(Util.GetWindowsCpuUsage(), 2)}%");
+}
+else if (OperatingSystem.IsLinux())
+{
+    Console.WriteLine($"{Math.Round(Util.GetLinuxCpuUsage(), 2)}%");
+}
+else if (OperatingSystem.IsMacOS())
+{
+    Console.WriteLine($"{Math.Round(Util.GetMacCpuUsage(), 2)}%");
+}
