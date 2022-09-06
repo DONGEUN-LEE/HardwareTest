@@ -5,55 +5,65 @@ public static class Util
 {
     public static double GetWindowsCpuUsage()
     {
-        var sb = new StringBuilder();
-        var proc = new Process
-        {
-            StartInfo = new ProcessStartInfo
+        try{
+            var sb = new StringBuilder();
+            var proc = new Process
             {
-                FileName = "wmic",
-                Arguments = "cpu get loadpercentage",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "wmic",
+                    Arguments = "cpu get loadpercentage",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            proc.Start();
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                sb.Append(proc.StandardOutput.ReadLine());
             }
-        };
-        proc.Start();
-        while (!proc.StandardOutput.EndOfStream)
-        {
-            sb.Append(proc.StandardOutput.ReadLine());
+            var line = sb.ToString();
+            line = line.Substring(line.IndexOf(' ') + 2);
+            return Convert.ToDouble(line);
         }
-        Console.WriteLine(sb.ToString());
+        catch { }
 
         return 0;
     }
 
     public static double GetLinuxCpuUsage()
     {
-        var sb = new StringBuilder();
-        var proc = new Process
+        try
         {
-            StartInfo = new ProcessStartInfo
+            var sb = new StringBuilder();
+            var proc = new Process
             {
-                FileName = @"/bin/bash",
-                Arguments = "-c \"top -bn1 | head -5 | grep Cpu\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = @"/bin/bash",
+                    Arguments = "-c \"top -bn1 | head -5 | grep Cpu\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            proc.Start();
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                sb.Append(proc.StandardOutput.ReadLine());
             }
-        };
-        proc.Start();
-        while (!proc.StandardOutput.EndOfStream)
-        {
-            sb.Append(proc.StandardOutput.ReadLine());
+            Console.WriteLine(sb.ToString());
         }
-        Console.WriteLine(sb.ToString());
+        catch { }
 
         return 0;
     }
 
     public static double GetMacCpuUsage()
     {
-        try {
+        try
+        {
             var sb = new StringBuilder();
             var proc = new Process
             {
@@ -77,7 +87,8 @@ public static class Util
             line = line.Substring(line.IndexOf(',') + 2);
             var sysStr = line.Substring(0, line.IndexOf('%'));
             return Convert.ToDouble(userStr) + Convert.ToDouble(sysStr);
-        } catch { }
+        }
+        catch { }
 
         return 0;
     }
