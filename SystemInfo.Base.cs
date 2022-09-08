@@ -1,5 +1,18 @@
 abstract class SystemInfoBase : ISystemInfo
 {
+    private MemoryInfo _memoryInfo;
+    public MemoryInfo MemoryInfo
+    {
+        get 
+        {
+            if (_memoryInfo == null)
+            {
+                _memoryInfo = GetMemoryInfo();
+            }
+            return _memoryInfo;
+        }
+    }
+
     public virtual string GetDotNetVersion()
     {
         return System.Environment.Version.ToString();
@@ -12,8 +25,7 @@ abstract class SystemInfoBase : ISystemInfo
 
     public virtual string GetMemorySize()
     {
-        var memInfo = this.GetMemoryInfo();
-        return GetBytesReadable((long)memInfo.Total);
+        return GetBytesReadable((long)this.MemoryInfo.Total);
     }
 
     public virtual string GetDiskSize(string path)
@@ -26,8 +38,7 @@ abstract class SystemInfoBase : ISystemInfo
 
     public virtual double GetMemoryUsage()
     {
-        var memInfo = this.GetMemoryInfo();
-        return Math.Round(memInfo.Used / (double)memInfo.Total * 100f, 2, MidpointRounding.AwayFromZero);
+        return Math.Round(this.MemoryInfo.Used / (double)this.MemoryInfo.Total * 100f, 2, MidpointRounding.AwayFromZero);
     }
 
     public virtual double GetDiskUsage(string path)

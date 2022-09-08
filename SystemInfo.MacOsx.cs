@@ -7,15 +7,15 @@ class SystemInfoMacOsx : SystemInfoBase
 {
     public override MemoryInfo GetMemoryInfo()
     {
-        var total = GetSysCtlIntegerByName("hw.memsize");
-        var free = GetSysCtlIntegerByName("vm.page_free_count") * GetSysCtlIntegerByName("vm.pagesize");
-
+        var unit = GetSysCtlIntegerByName("vm.pagesize");
+        var total = GetSysCtlIntegerByName("vm.pages") * unit;
+        var used = MemoryUtil.GetMacUseMemory() * unit;
 
         var metrics = new MemoryInfo
         {
             Total = total,
-            Free = free,
-            Used = total - free,
+            Free = total - used,
+            Used = used,
         };
 
 
