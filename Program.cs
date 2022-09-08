@@ -1,45 +1,20 @@
-﻿// using LibreHardwareMonitor.Hardware;
+﻿using Microsoft.Extensions.Configuration;
 
-// var computer = new Computer
-// {
-//     IsCpuEnabled = true,
-//     IsGpuEnabled = true,
-//     IsMemoryEnabled = false,
-//     IsMotherboardEnabled = false,
-//     IsControllerEnabled = false,
-//     IsNetworkEnabled = false,
-//     IsStorageEnabled = false
-// };
+var config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile($"appsettings.{Environment.OSVersion.Platform}.json", optional: true, reloadOnChange: true)
+    .Build();
 
-// var collector = new SensorCollector(computer);
-// collector.Start();
+var setupInfo = new SetupInformation(config);
+var workingDir = setupInfo.GetWorkingDirectory();
 
-// foreach (var report in collector.ReadAllSensors())
-// {
-//     Console.WriteLine($"{report.Hardware} / {report.Sensor} : {report.Value}");
-// }
+var systemInfo = SystemInfoFactory.Create();
 
-// collector.Dispose();
-
-// var onStart = CpuUsage.GetBySystem();
-// Thread.Sleep(500);
-// var onEnd = CpuUsage.GetBySystem();
-// Console.WriteLine("CPU Usage System: " + (onEnd - onStart));
-
-// var onStartP = CpuUsage.GetByProcess();
-// Thread.Sleep(500);
-// var onEndP = CpuUsage.GetByProcess();
-// Console.WriteLine("CPU Usage Process: " + (onEndP - onStartP));
-
-if (OperatingSystem.IsWindows()) 
-{
-    Console.WriteLine($"{Math.Round(Util.GetWindowsCpuUsage(), 2)}%");
-}
-else if (OperatingSystem.IsLinux())
-{
-    Console.WriteLine($"{Math.Round(Util.GetLinuxCpuUsage(), 2)}%");
-}
-else if (OperatingSystem.IsMacOS())
-{
-    Console.WriteLine($"{Math.Round(Util.GetMacCpuUsage(), 2)}%");
-}
+Console.WriteLine($"Processor : {systemInfo.GetProcessorName()}");
+Console.WriteLine($"OS : {systemInfo.GetOperatingSystemName()}");
+Console.WriteLine($"Total Memory : {systemInfo.GetMemorySize()}");
+Console.WriteLine($".NET Versions : {string.Join(", ", systemInfo.GetDotNetVersions())}");
+Console.WriteLine();
+Console.WriteLine($"Cpu Usage : {systemInfo.GetCpuUsage()}%");
+Console.WriteLine($"Memory Usage : {systemInfo.GetMemoryUsage()}%");
+Console.WriteLine($"Disk Usage : {systemInfo.GetDiskUsage(workingDir)}%");

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 
-public static class Util
+public static class CpuUtil
 {
     public static double GetWindowsCpuUsage()
     {
