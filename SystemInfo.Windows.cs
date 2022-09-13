@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
-using System.Text;
 
 [SupportedOSPlatform("Windows")]
 class SystemInfoWindows : SystemInfoBase
@@ -67,32 +65,7 @@ class SystemInfoWindows : SystemInfoBase
 
     public override double GetCpuUsage()
     {
-        try
-        {
-            var sb = new StringBuilder();
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "wmic",
-                    Arguments = "cpu get loadpercentage",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-            proc.Start();
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                sb.Append(proc.StandardOutput.ReadLine());
-            }
-            var line = sb.ToString();
-            line = line.Substring(line.IndexOf(' ') + 2);
-            return Convert.ToDouble(line);
-        }
-        catch { }
-
-        return 0;
+        return CpuUtil.GetWindowsCpuUsage();
     }
 
     public override List<string> GetDotNetVersions()

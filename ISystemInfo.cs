@@ -1,6 +1,7 @@
 public interface ISystemInfo
 {
     MemoryInfo GetMemoryInfo();
+    DiskInfo? GetDiskInfo(string path);
     string GetMemorySize();
     string GetDiskSize(string path);
     double GetCpuUsage();
