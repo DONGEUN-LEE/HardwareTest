@@ -5,14 +5,15 @@ public static class CpuUtil
 {
     public static double GetWindowsCpuUsage()
     {
-        try{
+        try
+        {
             var sb = new StringBuilder();
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "wmic",
-                    Arguments = "cpu get loadpercentage",
+                    FileName = "cmd.exe",
+                    Arguments = "/c wmic cpu get loadpercentage",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
@@ -26,6 +27,39 @@ public static class CpuUtil
             var line = sb.ToString();
             line = line.Substring(line.IndexOf(' ') + 2);
             return Convert.ToDouble(line);
+        }
+        catch { }
+
+        return 0;
+    }
+
+    public static double GetWindowsProcessCpuUsage(int processId)
+    {
+        try
+        {
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c wmic path Win32_PerfFormattedData_PerfProc_Process get IDProcess,PercentProcessorTime | findstr \"{processId}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            proc.Start();
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                var str = proc.StandardOutput.ReadLine();
+                if (string.IsNullOrWhiteSpace(str)) continue;
+                var pid = str.Substring(0, str.IndexOf(' '));
+                var usage = str.Substring(str.IndexOf(' ')).Trim();
+                if (Convert.ToInt32(pid) == processId)
+                {
+                    return Convert.ToDouble(usage);
+                }
+            }
         }
         catch { }
 

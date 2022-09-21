@@ -35,4 +35,6 @@ public static class MemoryUtil
 
         return 0;
     }
+
+    // windows memory usage => tasklist | findstr "9924"
 }
