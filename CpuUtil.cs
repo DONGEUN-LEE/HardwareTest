@@ -53,9 +53,10 @@ public static class CpuUtil
             {
                 var str = proc.StandardOutput.ReadLine();
                 if (string.IsNullOrWhiteSpace(str)) continue;
+                str = str.Trim();
                 var pid = str.Substring(0, str.IndexOf(' '));
                 var usage = str.Substring(str.IndexOf(' ')).Trim();
-                if (Convert.ToInt32(pid) == processId)
+                if (pid == processId.ToString())
                 {
                     return Convert.ToDouble(usage);
                 }
