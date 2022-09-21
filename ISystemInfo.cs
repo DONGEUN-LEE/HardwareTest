@@ -6,6 +6,8 @@ public interface ISystemInfo
     string GetDiskSize(string path);
     double GetCpuUsage();
     double GetMemoryUsage();
+    double GetProcessCpuUsage(int processId = -1);
+    double GetProcessMemorySize(int processId = -1);
     double GetDiskUsage(string path);
     string GetProcessorName();
     string GetOperatingSystemName();

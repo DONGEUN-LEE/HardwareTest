@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
@@ -66,6 +67,24 @@ class SystemInfoWindows : SystemInfoBase
     public override double GetCpuUsage()
     {
         return CpuUtil.GetWindowsCpuUsage();
+    }
+
+    public override double GetProcessCpuUsage(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return CpuUtil.GetWindowsProcessCpuUsage(processId);
+    }
+
+    public override double GetProcessMemorySize(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return MemoryUtil.GetWindowsProcessUsedMemory(processId);
     }
 
     public override List<string> GetDotNetVersions()

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.Versioning;
 
 [SupportedOSPlatform("Linux")]
@@ -27,5 +28,23 @@ class SystemInfoLinux : SystemInfoBase
     public override double GetCpuUsage()
     {
         return CpuUtil.GetLinuxCpuUsage();
+    }
+
+    public override double GetProcessCpuUsage(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return CpuUtil.GetUnixProcessCpuUsage(processId);
+    }
+
+    public override double GetProcessMemorySize(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return MemoryUtil.GetUnixProcessUsedMemory(processId);
     }
 }

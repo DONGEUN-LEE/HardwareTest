@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
@@ -46,4 +47,21 @@ class SystemInfoMacOsx : SystemInfoBase
         return CpuUtil.GetMacCpuUsage();
     }
 
+    public override double GetProcessCpuUsage(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return CpuUtil.GetUnixProcessCpuUsage(processId);
+    }
+
+    public override double GetProcessMemorySize(int processId = -1)
+    {
+        if (processId == -1)
+        {
+            processId = Process.GetCurrentProcess().Id;
+        }
+        return MemoryUtil.GetUnixProcessUsedMemory(processId);
+    }
 }

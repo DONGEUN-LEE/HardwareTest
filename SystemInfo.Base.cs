@@ -1,9 +1,9 @@
 abstract class SystemInfoBase : ISystemInfo
 {
-    private MemoryInfo _memoryInfo;
+    private MemoryInfo? _memoryInfo;
     public MemoryInfo MemoryInfo
     {
-        get 
+        get
         {
             if (_memoryInfo == null)
             {
@@ -40,6 +40,10 @@ abstract class SystemInfoBase : ISystemInfo
     {
         return Math.Round(this.MemoryInfo.Used / (double)this.MemoryInfo.Total * 100f, 2, MidpointRounding.AwayFromZero);
     }
+
+    public abstract double GetProcessCpuUsage(int processId = -1);
+
+    public abstract double GetProcessMemorySize(int processId = -1);
 
     public virtual double GetDiskUsage(string path)
     {
@@ -79,7 +83,7 @@ abstract class SystemInfoBase : ISystemInfo
         return System.Environment.Is64BitOperatingSystem;
     }
 
-    // Returns the human-readable file size for an arbitrary, 64-bit file size 
+    // Returns the human-readable file size for an arbitrary, 64-bit file size
     // The default format is "0.### XB", e.g. "4.2 KB" or "1.434 GB"
     private string GetBytesReadable(long i)
     {
