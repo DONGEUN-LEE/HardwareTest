@@ -18,5 +18,6 @@
 // Console.WriteLine($"Cpu Usage : {systemInfo.GetCpuUsage()}%");
 // Console.WriteLine($"Memory Usage : {systemInfo.GetMemoryUsage()}%");
 // Console.WriteLine($"Disk Usage : {systemInfo.GetDiskUsage(workingDir)}%");
-
-Console.WriteLine(CpuUtil.GetWindowsProcessCpuUsage(33972));
+Console.WriteLine(CpuUtil.GetMacCpuUsage());
+Console.WriteLine(CpuUtil.GetUnixProcessCpuUsage(1481));
+Console.WriteLine(MemoryUtil.GetUnixProcessUsedMemory(1481));
