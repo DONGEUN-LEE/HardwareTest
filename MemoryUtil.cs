@@ -36,7 +36,6 @@ public static class MemoryUtil
         return 0;
     }
 
-    // windows memory usage => tasklist | findstr "9924"
     public static double GetWindowsProcessUsedMemory(int processId)
     {
         try
@@ -96,7 +95,7 @@ public static class MemoryUtil
                 var usage = str.Substring(str.IndexOf(' ')).Trim();
                 if (pid == processId.ToString())
                 {
-                    return Convert.ToDouble(usage);
+                    return Convert.ToDouble(usage) * 1024f;
                 }
             }
         }

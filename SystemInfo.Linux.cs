@@ -12,8 +12,8 @@ class SystemInfoLinux : SystemInfoBase
 
         var metrics = new MemoryInfo
         {
-            Total = double.Parse(lines[0].Split(" ", StringSplitOptions.RemoveEmptyEntries)[1]),
-            Free = double.Parse(lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries)[1]),
+            Total = double.Parse(lines[0].Split(" ", StringSplitOptions.RemoveEmptyEntries)[1]) * 1024f,
+            Free = double.Parse(lines[1].Split(" ", StringSplitOptions.RemoveEmptyEntries)[1]) * 1024f,
         };
         metrics.Used = metrics.Total - metrics.Free;
 

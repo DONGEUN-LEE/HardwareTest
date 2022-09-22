@@ -17,8 +17,8 @@ class SystemInfoWindows : SystemInfoBase
             GlobalMemoryStatusEx(ref memoryStatusEx);
             var metrics = new MemoryInfo
             {
-                Total = Math.Round(memoryStatusEx.ullTotalPhys / 1024.0, 0),
-                Free = Math.Round(memoryStatusEx.ullAvailPhys / 1024.0, 0),
+                Total = memoryStatusEx.ullTotalPhys,
+                Free = memoryStatusEx.ullAvailPhys,
             };
             metrics.Used = metrics.Total - metrics.Free;
 

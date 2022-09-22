@@ -45,6 +45,12 @@ abstract class SystemInfoBase : ISystemInfo
 
     public abstract double GetProcessMemorySize(int processId = -1);
 
+    public virtual double GetProcessMemoryUsage(int processId = -1)
+    {
+        var size = GetProcessMemorySize(processId);
+        return Math.Round(size / (double)this.MemoryInfo.Total * 100f, 2, MidpointRounding.AwayFromZero);
+    }
+
     public virtual double GetDiskUsage(string path)
     {
         var diskInfo = this.GetDiskInfo(path);

@@ -19,6 +19,36 @@
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach"
+    },
+    {
+      "name": ".NET Core WSL Launch",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/bin/Debug/net6.0/HardwareTest.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "pipeTransport": {
+        "pipeCwd": "${workspaceRoot}",
+        "pipeProgram": "bash.exe",
+        "pipeArgs": ["-c"],
+        "debuggerPath": "~/vsdbg/vsdbg"
+      }
+    },
+    {
+      "name": ".NET Core WSL Attach",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickRemoteProcess}",
+      "pipeTransport": {
+        "pipeCwd": "${workspaceRoot}",
+        "pipeProgram": "bash.exe",
+        "pipeArgs": ["-c"],
+        "debuggerPath": "~/vsdbg/vsdbg",
+        "quoteArgs": true
+      }
     }
   ]
 }

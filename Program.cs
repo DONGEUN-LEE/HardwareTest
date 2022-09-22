@@ -19,4 +19,5 @@ Console.WriteLine();
 Console.WriteLine($"Cpu Usage : {systemInfo.GetCpuUsage()}%");
 Console.WriteLine($"Process Cpu Usage : {systemInfo.GetProcessCpuUsage()}%");
 Console.WriteLine($"Memory Usage : {systemInfo.GetMemoryUsage()}%");
+Console.WriteLine($"Process Memory Usage : {systemInfo.GetProcessMemoryUsage()}%");
 Console.WriteLine($"Disk Usage : {systemInfo.GetDiskUsage(workingDir)}%");
