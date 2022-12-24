@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
@@ -6,6 +7,11 @@ using System.Security;
 [SupportedOSPlatform("Windows")]
 class SystemInfoWindows : SystemInfoBase
 {
+    private readonly string _managementScope = "root\\cimv2";
+    private readonly System.Management.EnumerationOptions _enumerationOptions = new System.Management.EnumerationOptions() { ReturnImmediately = true, Rewindable = false, Timeout = System.Management.EnumerationOptions.InfiniteTimeout };
+
+    public bool UseAsteriskInWMI { get; set; }
+
     [SecurityCritical]
     public override MemoryInfo GetMemoryInfo()
     {
@@ -58,6 +64,28 @@ class SystemInfoWindows : SystemInfoBase
         }
     }
     #endregion
+
+    public override string GetOperatingSystemName()
+    {
+        string name = "";
+        string version = "";
+
+        string queryString = UseAsteriskInWMI ? "SELECT * FROM Win32_OperatingSystem" : "SELECT Caption, Version FROM Win32_OperatingSystem";
+        using ManagementObjectSearcher mos = new ManagementObjectSearcher(_managementScope, queryString, _enumerationOptions);
+
+        foreach (ManagementBaseObject mo in mos.Get())
+        {
+            name = GetPropertyString(mo["Caption"]);
+            version = GetPropertyString(mo["Version"]);
+        }
+
+        return $"{name} ({version})";
+    }
+
+    private static string GetPropertyString(object obj)
+    {
+        return (obj is string str) ? str : string.Empty;
+    }
 
     public override string GetProcessorName()
     {
