@@ -67,8 +67,8 @@ class SystemInfoWindows : SystemInfoBase
 
     public override string GetOperatingSystemName()
     {
-        string name = "";
-        string version = "";
+        var name = "";
+        var version = "";
 
         string queryString = UseAsteriskInWMI ? "SELECT * FROM Win32_OperatingSystem" : "SELECT Caption, Version FROM Win32_OperatingSystem";
         using ManagementObjectSearcher mos = new ManagementObjectSearcher(_managementScope, queryString, _enumerationOptions);

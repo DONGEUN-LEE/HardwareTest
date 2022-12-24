@@ -37,6 +37,44 @@ class SystemInfoMacOsx : SystemInfoBase
     private static extern int sysctlbyname(string name, out IntPtr oldp, ref IntPtr oldlenp, IntPtr newp, IntPtr newlen);
     #endregion
 
+    public override string GetOperatingSystemName()
+    {
+        var name = ReadProcessOutput("sw_vers", "-productName");
+        var version = ReadProcessOutput("sw_vers", "-productVersion");
+
+        return $"{name} ({version})";
+    }
+
+    private static string ReadProcessOutput(string cmd, string args)
+    {
+        try
+        {
+            using Process process = StartProcess(cmd, args);
+            using StreamReader streamReader = process.StandardOutput;
+            process.WaitForExit();
+
+            return streamReader.ReadToEnd().Trim();
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    private static Process StartProcess(string cmd, string args)
+    {
+        ProcessStartInfo processStartInfo = new ProcessStartInfo(cmd, args)
+        {
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true
+        };
+
+        return Process.Start(processStartInfo);
+    }
+
     public override string GetProcessorName()
     {
         return ProcessUtil.MacProcessor();

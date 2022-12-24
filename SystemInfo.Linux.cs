@@ -20,6 +20,40 @@ class SystemInfoLinux : SystemInfoBase
         return metrics;
     }
 
+    public override string GetOperatingSystemName()
+    {
+        string[] lines = TryReadLinesFromFile("/etc/os-release");
+        var name = "";
+        var version = "";
+
+        foreach (string line in lines)
+        {
+            if (line.StartsWith("NAME="))
+            {
+                name = line.Replace("NAME=", string.Empty).Trim('"');
+            }
+
+            if (line.StartsWith("VERSION_ID="))
+            {
+                version = line.Replace("VERSION_ID=", string.Empty).Trim('"');
+            }
+        }
+
+        return $"{name} ({version})";
+    }
+
+    private static string[] TryReadLinesFromFile(string path)
+    {
+        try
+        {
+            return File.ReadAllLines(path);
+        }
+        catch
+        {
+            return Array.Empty<string>();
+        }
+    }
+
     public override string GetProcessorName()
     {
         return ProcessUtil.LinuxProcessor();
